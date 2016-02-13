@@ -1,0 +1,91 @@
+
+<html>
+    <style type="text/css">
+    caption {
+    font-family: Arial, Helvetica, Verdana, sans-serif;
+    font-size: 150%;
+    font-weight: lighter;
+    }
+    </style>
+    <style type="text/css">
+    tr {
+    font-family: Arial, Helvetica, Verdana, sans-serif;
+    font-size: 100%;
+    font-weight: lighter;
+    }
+    </style>
+        <style type="text/css">
+    h1 {
+    font-family: Arial, Helvetica, Verdana, sans-serif;
+    font-size: 190%;
+    font-weight: lighter;
+    }
+    </style>
+    {% extends "base.html" %}
+    <head>
+        <title>{% block title %}User_data{% endblock %}</title>
+    </head>
+        <body>
+            {% block content %}
+            {% if error %}
+                <h2 align="center">No users found. Please, print the correct email</h2>
+            {% else %}
+            <table border="5", cellspacing="0", cellpadding="6"
+                align="center">
+                <caption > User_info data </caption>
+                <tr><th>ID</th><th>Nickname</th><th>Email</th><th>Password_hash</th><th>XP</th><th>Created</th><th>Updated</th></tr>
+                {% for player in players %}
+                    {# Each "player" is a players model object. #}
+                    <tr>
+                        <td>{{ player.id }}</td>
+                        <td>{{ player.nickname }}</td>
+                        <td>{{ player.email}}</td>
+                        <td>  ********  </td>
+                        <td>{{ player.xp}} <a href="/changeplayerxp/{{player.id}}">change XP</a></td>
+                        <td>{{ player.created|date:"M d Y"}} {{ player.created|time:"H:i:s" }}</td>
+                        <td>{{ player.updated|date:"M d Y"}} {{ player.created|time:"H:i:s" }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </table>
+        {% if error %}
+        {% else %}
+        <div class="pagination" align="center">
+            <span class="step-links">
+                {% if players.has_previous %}
+                    <a href="?page={{ players.previous_page_number }}"><button type = 'submit'>PREVIOUS</button></a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ players.number }} of {{ players.paginator.num_pages }}.
+                </span>
+                {% if players.has_next %}
+                    <a href="?page={{ players.next_page_number }}"><button type = 'submit'>NEXT</button></a>
+                {% endif %}
+            </span>
+        </div>
+        {% endif %}
+    </body>
+</html>
+<h1>Search by email</h1>
+    <form action="/userinfo/" method="get">
+    {{ form }}
+    <input type="submit" value="Submit" />
+</form>
+
+<html>
+    <style type="text/css">
+    ul {
+    font-family: Arial, Helvetica, Verdana, sans-serif;
+    font-size: 100%;
+    font-weight: lighter;
+    }
+    </style>
+<body>
+    <div>
+        <input type="button" onclick="location.href='/base/'" value="BASE PAGE"/>
+        <input type="button" onclick="history.back();" value="TO THE PREVIOUS PAGE"/>
+    </div>
+    {% endblock %}
+</body>
+</html>

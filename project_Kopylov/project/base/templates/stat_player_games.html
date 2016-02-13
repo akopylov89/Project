@@ -1,0 +1,87 @@
+
+<html>
+    <style type="text/css">
+    caption {
+    font-family: Arial, Helvetica, Verdana, sans-serif;
+    font-size: 150%;
+    font-weight: lighter;
+    }
+    </style>
+    <style type="text/css">
+    tr {
+    font-family: Arial, Helvetica, Verdana, sans-serif;
+    font-size: 100%;
+    font-weight: lighter;
+    }
+    </style>
+        <style type="text/css">
+    h1 {
+    font-family: Arial, Helvetica, Verdana, sans-serif;
+    font-size: 120%;
+    font-weight: lighter;
+    }
+    </style>
+    {% extends "base.html" %}
+    <head>
+        <title>{% block title %}Statistics{% endblock %}</title>
+    </head>
+        <body>
+            {% block content %}
+            {% if error %}
+                <h2 align="center">No stats found. Please, choose the correct period</h2>
+            {% else %}
+                <table border="5", cellspacing="0", cellpadding="6">
+                <caption > Player statistics </caption>
+                <tr><th>ID</th><th>Target date</th><th>Game count</th><th>XP amount</th><th>Created</th>
+                {% for stat in stat_list %}
+                    {# Each "stat" is a stat model object. #}
+                    <tr>
+                        <td>{{ stat.id }}</td>
+                        <td>{{ stat.target_date }}</td>
+                        <td>{{ stat.game_count }}</td>
+                        <td>{{ stat.xp_amount }}</td>
+                        <td>{{ stat.created|date:"M d Y"}} {{ stat.created|time:"H:i:s" }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </table>
+            {% if error %}
+            {% else %}
+                    <div class="pagination">
+                        <span class="step-links">
+                            {% if stat_list.has_previous %}
+                                <a href="?page={{ stat_list.previous_page_number }}"><button type = 'submit'>PREVIOUS</button></a>
+                            {% endif %}
+                        <span class="current">
+                            Page {{ stat_list.number }} of {{ stat_list.paginator.num_pages }}.
+                        </span>
+                        {% if stat_list.has_next %}
+                            <a href="?page={{ stat_list.next_page_number }}"><button type = 'submit'>NEXT</button></a>
+                        {% endif %}
+                        </span>
+                    </div>
+            {% endif %}
+        </body>
+</html>
+<h1>Search by date:</h1>
+    <form action="/statplayergames/" method="get">
+    {{ form }}
+    <input type="submit" value="Submit" />
+</form>
+
+<html>
+    <style type="text/css">
+    ul {
+    font-family: Arial, Helvetica, Verdana, sans-serif;
+    font-size: 100%;
+    font-weight: lighter;
+    }
+    </style>
+<body>
+    <div>
+        <input type="button" onclick="location.href='/base/'" value="BASE PAGE"/>
+        <input type="button" onclick="history.back();" value="TO THE PREVIOUS PAGE"/>
+    </div>
+    {% endblock %}
+</body>
+</html>
